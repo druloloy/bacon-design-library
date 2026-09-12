@@ -208,7 +208,7 @@ These are the ten PARTIAL rows, restated plainly.
    labels, sentence case. A library cannot read intent from a string.
 5. **The period switcher is chips, not an underlined control.** The guide's own screens show chips;
    the underline note appears only in the typography section.
-6. **Storybook is authored but not rendered here.** The 30 stories typecheck and lint, and the
+6. **Storybook is authored but not rendered here.** The 42 stories typecheck and lint, and the
    components they use are covered by 239 tests — but no emulator or device ran them in this
    environment, so the catalogue has not been visually reviewed.
 7. **The example app has not been launched.** Its source is complete and it imports only through
