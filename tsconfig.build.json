@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "rootDir": "."
+  },
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "example",
+    "tests",
+    "stories",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+}

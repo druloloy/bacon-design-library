@@ -1,0 +1,8 @@
+tests/
+stories/
+example/
+docs/
+.github/
+coverage/
+*.stories.tsx
+jest.config.js

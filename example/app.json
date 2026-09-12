@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Bacon Design System Example",
+    "slug": "bacon-design-system-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#FEFEFE",
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true },
+    "android": { "package": "com.bacon.designsystem.example" }
+  }
+}

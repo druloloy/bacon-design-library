@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext", "dom"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "types": ["react"],
+    "baseUrl": "../..",
+    "paths": {
+      "@bacon/design-system": ["./lib/typescript/src/index.d.ts"]
+    }
+  },
+  "include": ["consumer.tsx"]
+}

@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Format check
+        run: npm run format:check
+
+      # Split so a failure names the category rather than "tests failed".
+      - name: Unit tests
+        run: npx jest tests/unit
+
+      - name: Brand rule tests
+        run: npx jest tests/brand
+
+      - name: Component tests
+        run: npx jest tests/components
+
+      - name: Accessibility tests
+        run: npx jest tests/accessibility
+
+      - name: Coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
+      - name: Build the package
+        run: npm run build
+
+      # Runs against lib/, not src/: proves the *published* entry points and declarations work.
+      - name: Package integration test
+        run: |
+          npx jest tests/integration
+          npm run verify:package
+
+  example:
+    name: Example app typechecks against the built package
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install and build the package
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install the example app
+        working-directory: example
+        run: npm install
+
+      - name: Typecheck the example app
+        working-directory: example
+        run: npm run typecheck
