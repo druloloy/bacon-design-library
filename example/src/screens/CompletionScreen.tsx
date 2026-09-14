@@ -4,7 +4,7 @@ import {
   baconIllustrationColors,
   baconRadii,
   baconSpacing,
-} from '@bacon/design-system';
+} from '@druloloy/bacon-ui';
 import type { Budget, Route } from '../types';
 
 /**

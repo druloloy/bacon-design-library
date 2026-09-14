@@ -15,7 +15,7 @@ const isDev = typeof __DEV__ === 'undefined' ? true : __DEV__;
 function warn(message: string): void {
   if (!isDev) return;
   // eslint-disable-next-line no-console
-  console.warn(`[@bacon/design-system] ${message}`);
+  console.warn(`[@druloloy/bacon-ui] ${message}`);
 }
 
 /** Brand Guide 07 — "4 · 8 · 12 · 20 · 40. Nothing else." */

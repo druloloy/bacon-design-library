@@ -1,6 +1,6 @@
 # Brand Guide compliance audit
 
-Implementation: `@bacon/design-system` v1.0.0
+Implementation: `@druloloy/bacon-ui` v1.0.0
 Source of truth: _Bacon Brand & Interface Guide_, version 1.0 (sections 00–14)
 
 Every row below was checked against the guide text, against the implementation, and — where a test

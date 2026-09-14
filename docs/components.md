@@ -5,6 +5,43 @@ Guide rule behind each. Section numbers refer to the _Bacon Brand & Interface Gu
 
 Throughout: **invalid use** means the API will not let you do it, or a test will fail if you try.
 
+Everything here is imported from the package:
+
+```tsx
+import { WalletTile, BaconButton, formatMoney } from '@druloloy/bacon-ui';
+```
+
+New to Bacon? Start with [Getting started](getting-started.md), then use this page to look things
+up.
+
+## Contents
+
+- **[Atoms](#atoms)**
+  - [`BaconText`](#bacontext)
+  - [`BaconScreen`](#baconscreen)
+  - [`BaconButton`](#baconbutton)
+  - [`BaconChip`](#baconchip)
+  - [`BaconMoneyDisplay`](#baconmoneydisplay)
+  - [`BaconProgressBar`](#baconprogressbar)
+  - [`EyeToggle`](#eyetoggle)
+  - [`BaconFab`](#baconfab)
+  - [`BaconArrow`](#baconarrow)
+  - [`DestructiveAction`](#destructiveaction)
+- **[Molecules](#molecules)**
+  - [`TopBar`](#topbar)
+  - [`QuestionInput`](#questioninput)
+  - [`QuickAmountInput`](#quickamountinput)
+  - [`ChipGroup` and `CategoryChipGroup`](#chipgroup-and-categorychipgroup)
+  - [`StatTile` / `StatTileRow`](#stattile--stattilerow)
+  - [`TransactionRow`, `SectionHeader`, `BalanceDisplay`](#transactionrow-sectionheader-balancedisplay)
+- **[Organisms](#organisms)**
+  - [`WalletTile` / `WalletGrid`](#wallettile--walletgrid)
+  - [`RowLink`](#rowlink)
+  - [`BottomSheet`, `SheetPrimaryAction`, `SheetAction`](#bottomsheet-sheetprimaryaction-sheetaction)
+  - [`Hero`, `Panel`, `PanelGroup`](#hero-panel-panelgroup)
+- **[Templates — the four archetypes](#templates--the-four-archetypes)**
+- **[Utilities](#utilities)**
+
 ---
 
 ## Atoms
@@ -187,7 +224,7 @@ it. The glyph may be any size; the tap target stays 48pt.
 a coloured ground logs a development warning.
 
 **Invalid use.** A tab bar beside it. The package ships no navigator: navigation _mechanics_ belong
-to the consuming app, and the design system provides the control.
+to the consuming app, and Bacon provides the control.
 
 ---
 

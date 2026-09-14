@@ -1,325 +1,167 @@
-# @bacon/design-system
+# Bacon
 
-The single source of truth for Bacon's visual language in React Native.
-
-Bacon is a budgeting and savings app for people who want to feel in control, not audited. This
-package holds everything that makes a screen _look and feel like Bacon_ — the tokens, the
-typography, the surfaces, the controls, the interaction patterns and the accessibility behaviour.
-Consuming apps hold everything else.
-
-> The consuming app answers **"what does this feature do?"**
-> The design system answers **"what does Bacon look and feel like?"**
-
-Everything here is derived from the _Bacon Brand & Interface Guide v1.0_, which was itself
-reverse-engineered from thirty screens of the product library. Colour values are sampled from the
-exported artwork; geometry is measured from the 720 px files and halved to the 360 pt design frame.
-
----
-
-## The principles
-
-These are not decoration. Each one is enforced somewhere in the code, and the enforcement point is
-named beside it.
-
-| Principle                                     | How the package enforces it                                                                           |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **Money is the headline**                     | `BaconMoneyDisplay` is the only way to render an amount; `heroMoney` is the largest role in the scale |
-| **One decision per screen**                   | `OneQuestionTemplate` has no footer or bottom-CTA slot                                                |
-| **Empty space is finished space**             | Templates do not stretch content to fill; the lower third is left alone                               |
-| **Ask, don't label**                          | `QuestionInput` requires `question` and has no `label` or `placeholder` prop                          |
-| **Light is money, navy is system**            | `BaconScreen` takes `variant="money" \| "system"` and has no `backgroundColor`                        |
-| **Status red is a surface**                   | `WalletTile state="overBudget"` and `StatTile` at 0% paint a filled red surface                       |
-| **Destructive red is text**                   | `DestructiveAction` is bare red text; `BaconButton` has no `danger` variant at all                    |
-| **Light title, Bold question, Regular value** | `pageTitle` (300), `question` (700), `body` (400)                                                     |
-| **FINISH lives in the top bar**               | `TopBar.forwardAction.label` is typed `'NEXT' \| 'FINISH'`; there is no `title` prop                  |
-| **Type or tap, always both**                  | `QuickAmountInput` wires the chips into the same editable value                                       |
-| **Privacy is one tap away**                   | `BalanceDisplay` pairs the amount with `EyeToggle` by construction                                    |
-| **No tabs**                                   | The package ships `BaconFab` and no navigator                                                         |
-| **No toasts**                                 | The package ships `CompletionTemplate` and no toast or snackbar                                       |
-| **No gradients, no decorative third colour**  | Eight UI colours, one shadow, three radii — and lint fails on a raw hex                               |
-
----
-
-## Installation
-
-```bash
-npm install @bacon/design-system
-```
-
-### Peer dependencies
-
-| Package                          | Range      | Required? | Why                                                                                                      |
-| -------------------------------- | ---------- | --------- | -------------------------------------------------------------------------------------------------------- |
-| `react`                          | `>=18.2.0` | yes       | —                                                                                                        |
-| `react-native`                   | `>=0.73.0` | yes       | —                                                                                                        |
-| `react-native-safe-area-context` | `>=4.8.0`  | optional  | `BaconScreen` and `BottomSheet` use insets. Without it they fall back to zero insets rather than failing |
-
-The package has **no runtime dependencies**. The two glyphs that would normally need
-`react-native-svg` — the long arrow and the FAB's 2×2 grid — are drawn from `View`s instead, so no
-consumer is forced through a native linking step for decoration.
-
-### Fonts
-
-Quicksand is not bundled. Register it in your app:
-
-```bash
-# the four weights Bacon uses — download from Google Fonts (SIL OFL 1.1)
-Quicksand-Light.ttf     300
-Quicksand-Regular.ttf   400
-Quicksand-Medium.ttf    500
-Quicksand-Bold.ttf      700
-```
-
-Do **not** register `Quicksand-SemiBold`. Weight 600 is deliberately absent — the identity depends
-on the gap between Light and Bold, and `BaconFontWeight` makes a 600 a compile error.
-
-With Expo:
+The React Native design library for the Bacon app: colours, type, components and screen templates,
+built to the _Bacon Brand & Interface Guide_.
 
 ```tsx
-const [loaded] = useFonts({
-  'Quicksand-Light': require('./assets/fonts/Quicksand-Light.ttf'),
-  'Quicksand-Regular': require('./assets/fonts/Quicksand-Regular.ttf'),
-  'Quicksand-Medium': require('./assets/fonts/Quicksand-Medium.ttf'),
-  'Quicksand-Bold': require('./assets/fonts/Quicksand-Bold.ttf'),
-  Quicksand: require('./assets/fonts/Quicksand-Regular.ttf'),
-});
+import { WalletTile } from '@druloloy/bacon-ui';
 ```
 
-Android does not reliably apply `fontWeight` to a custom `fontFamily`, so the package resolves a
-named family per weight there and a single family on iOS. If your app registers fonts differently,
-override it once:
-
-```tsx
-<BaconThemeProvider fontStrategy="named" fontFamilyMap={myMap}>
-```
+**[Getting started](docs/getting-started.md)** · [Components](docs/components.md) ·
+[Example app](example) · [Changelog](CHANGELOG.md)
 
 ---
 
-## Setup
+## Install
 
-Wrap the app once:
+Bacon isn't published to npm. Install it from GitHub, pinned to a release:
+
+```bash
+yarn add github:druloloy/bacon-design-library#v1.0.0
+```
+
+```bash
+npm install github:druloloy/bacon-design-library#v1.0.0
+```
+
+It installs as **`@druloloy/bacon-ui`**. The first install compiles the library, so give it a minute
+or two.
+
+Bacon needs React 18.2+ and React Native 0.73+, which your app already has. Also add:
+
+```bash
+yarn add react-native-safe-area-context
+```
+
+and the Quicksand font, as described in
+[Getting started → Add the font](docs/getting-started.md#2-add-the-font).
+
+## Set up
+
+Wrap your app once:
 
 ```tsx
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { BaconThemeProvider } from '@bacon/design-system';
+import { BaconThemeProvider } from '@druloloy/bacon-ui';
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <BaconThemeProvider>
-        <YourNavigator />
+      <BaconThemeProvider fontStrategy="named">
+        <YourNavigation />
       </BaconThemeProvider>
     </SafeAreaProvider>
   );
 }
 ```
 
-`BaconThemeProvider` takes three optional settings, and nothing else. There is no palette
-override, because a palette override is a fork of the brand.
-
-| Prop               | Default                                    | What it is                                                                                   |
-| ------------------ | ------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `fontStrategy`     | `'named'` on Android, `'single'` elsewhere | How a weight becomes a `fontFamily`                                                          |
-| `fontFamilyMap`    | `Quicksand-Light/Regular/Medium/Bold`      | The registered family names                                                                  |
-| `useAccessibleRed` | `false`                                    | Paint filled red surfaces `#C40A22` instead of `#DE0A26`, the guide's second contrast remedy |
-
----
-
-## Basic usage
+## Use
 
 ```tsx
-import {
-  BaconScreen,
-  BaconText,
-  BalanceDisplay,
-  WalletGrid,
-  WalletTile,
-} from '@bacon/design-system';
+import { useState } from 'react';
+import { BalanceDisplay, HeroFeedTemplate, WalletGrid, WalletTile } from '@druloloy/bacon-ui';
 
-function Dashboard() {
+export function Dashboard() {
   const [hidden, setHidden] = useState(false);
 
   return (
-    <BaconScreen variant="money">
-      <BalanceDisplay amount={20000} hidden={hidden} onToggleHidden={setHidden} />
+    <HeroFeedTemplate
+      hero={<BalanceDisplay amount={20000} hidden={hidden} onToggleHidden={setHidden} />}
+    >
       <WalletGrid>
         <WalletTile
-          name="Budget 2"
+          name="Transport"
           category={{ emoji: '🚕', label: 'Transportation' }}
           amount={5000}
           meta="Monthly"
           progress={{ percent: 50, value: 5000 }}
         />
         <WalletTile
-          name="Budget 1"
-          category={{ emoji: '🚕', label: 'Transportation' }}
+          name="Groceries"
+          category={{ emoji: '🛒', label: 'Groceries' }}
           amount={-110}
           meta="Monthly"
           progress={{ percent: 0, value: 10110 }}
           state="overBudget"
         />
       </WalletGrid>
-    </BaconScreen>
+    </HeroFeedTemplate>
   );
 }
 ```
 
-Import from the package name only. Deep imports are not supported and will not resolve:
+The [getting started guide](docs/getting-started.md) builds a dashboard, a two-step form, a
+confirmation screen and a settings screen, one step at a time.
 
-```tsx
-import { WalletTile } from '@bacon/design-system'; // ✅
-import WalletTile from '@bacon/design-system/src/organisms/…'; // ❌ blocked by the exports map
-```
+## How Bacon works
 
----
+Four ideas explain almost every API decision:
 
-## Components
+1. **Every screen is either a money screen or a system screen.** Money screens (anything that shows
+   or changes money) are light. System screens (settings, security, notifications) are navy. You
+   pick the template, and every component on it adapts. You never pass colours.
+2. **Text has roles, not styles.** `<BaconText variant="question">` has no size, weight or colour
+   props.
+3. **Red means one of two things.** A red _surface_ means over budget
+   (`<WalletTile state="overBudget">`). Red _text_ means delete (`<DestructiveAction>`). There is no
+   red button.
+4. **Forms ask one question per screen** and move forward from the top bar, with `NEXT` or `FINISH`.
 
-### Foundations
+When the API won't let you do something, it's almost always one of these, on purpose. The reasoning
+is in [docs/architecture.md](docs/architecture.md).
 
-`baconTokens` · `baconColors` · `baconTypography` · `baconSpacing` · `baconRadii` ·
-`baconLayout` · `baconCardShadow` · `baconIllustrationColors` · `baconContrast`
+## What's included
 
-Illustration accents are exported **separately** from the UI palette and are absent from the
-theme, so no component can reach them through `useBaconTheme()`. They are art-only, never a status.
+| For                  | Components                                                                                                                                     |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Whole screens        | `HeroFeedTemplate` · `OneQuestionTemplate` · `NavyStackTemplate` · `CompletionTemplate` · `BaconScreen`                                        |
+| Showing money        | `BalanceDisplay` · `BaconMoneyDisplay` · `WalletTile` · `WalletGrid` · `StatTile` · `StatTileRow` · `BaconProgressBar` · `TransactionRow`      |
+| Asking for input     | `QuestionInput` · `QuickAmountInput` · `ChipGroup` · `CategoryChipGroup` · `BaconChip`                                                         |
+| Actions & navigation | `BaconButton` · `TopBar` · `RowLink` · `BaconFab` · `BottomSheet` · `SheetPrimaryAction` · `SheetAction` · `DestructiveAction` · `EyeToggle`   |
+| Text & layout        | `BaconText` · `SectionHeader` · `Hero` · `Panel` · `PanelGroup` · `BaconArrow`                                                                 |
+| Theme & tokens       | `BaconThemeProvider` · `useBaconTheme` · `useBaconSurface` · `baconTokens` · `baconColors` · `baconSpacing` · `baconRadii` · `baconTypography` |
+| Formatting           | `formatMoney` · `formatMoneyChange` · `formatTarget` · `formatPercent` · `maskMoney`                                                           |
 
-### Atoms
+Every component, with its props and examples: [docs/components.md](docs/components.md).
 
-| Component           | What it is                                                                                      |
-| ------------------- | ----------------------------------------------------------------------------------------------- |
-| `BaconText`         | The only text primitive. `variant` is required; there is no size, weight, colour or family prop |
-| `BaconScreen`       | The semantic ground: `money` → Paper, `system` → Navy                                           |
-| `BaconButton`       | A 48 pt pill. Two variants; its appearance is decided by the surface it stands on               |
-| `BaconChip`         | 36 pt visually, 48 pt hit area, announced as a radio                                            |
-| `BaconMoneyDisplay` | Every amount in the product                                                                     |
-| `BaconProgressBar`  | The 20 pt pill with the value chip straddling the fill boundary                                 |
-| `EyeToggle`         | Balance masking, with a label that flips with its state                                         |
-| `BaconFab`          | The 56 pt navy app switcher — Bacon's only persistent navigation                                |
-| `BaconArrow`        | The long arrow, drawn from `View`s                                                              |
-| `DestructiveAction` | Bare bold red text, optionally with a confirmation step                                         |
+## Theme options
 
-### Molecules
+`BaconThemeProvider` takes three optional props:
 
-`TopBar` · `SectionHeader` · `QuestionInput` · `QuickAmountInput` · `ChipGroup` ·
-`CategoryChipGroup` · `StatTile` / `StatTileRow` · `TransactionRow` · `BalanceDisplay`
+| Prop               | Default                                              | Set it when                                                                                            |
+| ------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `fontStrategy`     | `'named'` on Android, `'single'` on iOS              | You registered Quicksand as four named files, as in the guide and the usual Expo setup. Use `'named'`. |
+| `fontFamilyMap`    | `Quicksand-Light` · `-Regular` · `-Medium` · `-Bold` | Your font files are registered under different names.                                                  |
+| `useAccessibleRed` | `false`                                              | You need a darker red (`#C40A22`) behind small white text.                                             |
 
-### Organisms
+## Updating
 
-`WalletTile` / `WalletGrid` · `RowLink` · `BottomSheet` (+ `SheetPrimaryAction`, `SheetAction`) ·
-`Hero` · `Panel` / `PanelGroup`
+Read the [changelog](CHANGELOG.md) first — a **Changed — tokens** section means things will move on
+screen. Then change the tag in your `package.json` (`#v1.0.0` → `#v1.1.0`) and run `yarn` or
+`npm install`.
 
-### Templates — the four documented archetypes
-
-| Template              | Archetype                                          |
-| --------------------- | -------------------------------------------------- |
-| `HeroFeedTemplate`    | 1 · Hero + feed (pass `heroVariant="navy"` for 1b) |
-| `OneQuestionTemplate` | 2 · One question                                   |
-| `NavyStackTemplate`   | 3 · Navy stack                                     |
-| `CompletionTemplate`  | 4 · Completion                                     |
-
-`BottomSheet` is the one overlay, not a fifth archetype.
-
-### Utilities
-
-`formatMoney` · `formatMoneyChange` · `formatChange` · `formatTarget` · `formatPercent` ·
-`formatHandle` · `formatAttribution` · `maskMoney` · `moneyAccessibilityLabel`
-
-```ts
-formatMoney(20000); // "₱ 20,000"   (with a hard space)
-formatMoneyChange(2000, 50); // "₱ 2,000 +50"
-formatMoney(-110); // "₱ -110"     (the minus is never dropped)
-```
-
----
-
-## Accessibility
-
-The guide's accessibility page lists five things "every build needs" and two defects that must not
-be inherited. All seven are implemented here rather than left to application developers, and
-`tests/accessibility` is the check that they hold.
-
-- **48 pt minimum targets.** Chips stay 36 pt tall and grow their _hit area_ with `hitSlop` —
-  "padding, not resizing".
-- **Real labels** on the eye toggle, the FAB and every chip.
-- **Chips are a radio group**, not a list of buttons.
-- **A visible focus ring**: `focusRing(onNavy)` gives 2 pt navy, or 2 pt white on a navy screen.
-- **Status is never carried by colour alone.** A red tile keeps its minus sign; a zero stat tile
-  keeps its `0%`; both say so to a screen reader.
-- **Muted grey is never used below 14 pt, and never on a coloured surface.** A 14 pt `meta` role
-  asked for on a navy or red ground is _automatically_ promoted to the 16 pt / 500 role — the
-  guide's own remedy, applied by construction rather than by memory.
-- **Destructive actions are identifiable by form**, not just colour, and can require their own
-  confirmation step via `confirmLabel`.
-
-Dynamic Type is honoured and capped at 1.6×, the largest multiplier at which every documented
-layout still holds on the 360 pt frame.
-
----
-
-## Development
+## Working on Bacon
 
 ```bash
-npm install
-
-npm run lint          # ESLint, including the brand rules
-npm run typecheck     # tsc --noEmit, strict
-npm test              # the whole suite
-npm run test:coverage # with coverage
-npm run build         # commonjs + module + declarations, via builder-bob
-npm run verify        # everything CI runs, in order
+git clone https://github.com/druloloy/bacon-design-library.git
+cd bacon-design-library
+npm install      # installs the dev tools and builds lib/
+npm run verify   # lint, typecheck, tests and build: the same checks CI runs
 ```
 
-### Tests
+Running the example app and Storybook, trying a change inside your own app, and cutting a release
+are all covered in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-| Folder                | What it protects                                                                                           |
-| --------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `tests/unit`          | Formatting and token behaviour                                                                             |
-| `tests/brand`         | **The brand itself** — no weight 600, no filled red button, five spacing values, one shadow, eight colours |
-| `tests/components`    | Component behaviour and the documented visual states                                                       |
-| `tests/accessibility` | The Brand Guide's accessibility page, end to end                                                           |
-| `tests/integration`   | The public API, imported the way a consuming app imports it                                                |
+## Documentation
 
-A failure in `tests/brand` means someone has forked the Bacon system, not that a component broke.
-
-### Storybook
-
-The stories live in `stories/`, beside the components they document. Storybook itself lives in the
-example app, so the published package carries no Storybook dependency:
-
-```bash
-cd example && npm install && npm run storybook
-```
-
-### The example app
-
-```bash
-npm run build
-cd example && npm install && npm start
-```
-
-It renders a dashboard, both steps of the create-budget flow, a completion screen and a settings
-screen — every import through the package's public API. See [`example/README.md`](example/README.md).
-
----
-
-## Contributing
-
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before adding a component. The short version, from the
-guide itself:
-
-> The library's strength is that thirty screens agree with each other. A new colour, radius, or
-> weight introduced on one screen is not a local decision — it is a fork of the system. Update the
-> tokens and the other twenty-nine, or don't.
-
-## Versioning
-
-Semantic Versioning. **A change to a foundational design token is a breaking change**, because it
-can move every screen in every consuming app. See [CHANGELOG.md](CHANGELOG.md).
-
-## Compliance
-
-[`docs/brand-compliance.md`](docs/brand-compliance.md) audits this implementation against every
-rule in the Brand Guide, with a PASS / PARTIAL / FAIL verdict and the evidence for each.
+| Document                                     | Read it to                                                |
+| -------------------------------------------- | --------------------------------------------------------- |
+| [Getting started](docs/getting-started.md)   | Install Bacon and build your first screens                |
+| [Components](docs/components.md)             | Look up a component's props, variants and limits          |
+| [Architecture](docs/architecture.md)         | Understand why the API is shaped the way it is            |
+| [Brand compliance](docs/brand-compliance.md) | See how each Brand Guide rule is enforced, and what isn't |
+| [Changelog](CHANGELOG.md)                    | Find out what changed in each release                     |
+| [Contributing](CONTRIBUTING.md)              | Develop, test and release Bacon                           |
 
 ## Licence
 

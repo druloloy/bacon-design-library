@@ -40,7 +40,7 @@ import {
   type WalletTileState,
   type BaconTextVariant,
   type CompletionLink,
-} from '@bacon/design-system';
+} from '@druloloy/bacon-ui';
 
 const theme: BaconTheme | null = null;
 const state: WalletTileState = 'prioritySavings';

@@ -40,7 +40,7 @@ export function BaconFab({
   if (__DEV__ && surface.onColor) {
     // eslint-disable-next-line no-console
     console.warn(
-      '[@bacon/design-system] BaconFab is rendered on a coloured surface. The guide places the ' +
+      '[@druloloy/bacon-ui] BaconFab is rendered on a coloured surface. The guide places the ' +
         'FAB on money screens only (Brand Guide 09) — a system screen has no persistent navigation.',
     );
   }

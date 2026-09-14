@@ -1,8 +1,8 @@
 /**
- * @bacon/design-system — the public API.
+ * @druloloy/bacon-ui — the public API.
  *
  * Everything a consuming app may use is exported from here. Nothing is exported from an internal
- * path: `import { WalletTile } from '@bacon/design-system'` is the only supported form, and the
+ * path: `import { WalletTile } from '@druloloy/bacon-ui'` is the only supported form, and the
  * package's `exports` map makes deep imports unresolvable rather than merely discouraged.
  */
 

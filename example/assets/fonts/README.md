@@ -1,6 +1,6 @@
 # Quicksand
 
-The design system does not bundle Quicksand — the app registers it, because font loading is an
+Bacon does not bundle Quicksand — the app registers it, because font loading is an
 application concern and bundling a typeface into a library duplicates it in every consumer.
 
 Download the four weights the Bacon system uses from Google Fonts

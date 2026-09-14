@@ -1,4 +1,4 @@
-import { CategoryChipGroup, OneQuestionTemplate, QuestionInput } from '@bacon/design-system';
+import { CategoryChipGroup, OneQuestionTemplate, QuestionInput } from '@druloloy/bacon-ui';
 import type { Budget } from '../types';
 
 /**

@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { BaconThemeProvider } from '@bacon/design-system';
+import { BaconThemeProvider } from '@druloloy/bacon-ui';
 
 /**
  * Every story renders inside the real provider, so the catalogue and the app resolve tokens the

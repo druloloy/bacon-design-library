@@ -1,4 +1,4 @@
-import { ChipGroup, OneQuestionTemplate, QuickAmountInput } from '@bacon/design-system';
+import { ChipGroup, OneQuestionTemplate, QuickAmountInput } from '@druloloy/bacon-ui';
 import { PERIODS, QUICK_AMOUNTS } from '../data';
 import type { Budget } from '../types';
 

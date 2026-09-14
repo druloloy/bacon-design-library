@@ -1,7 +1,8 @@
 {
-  "name": "@bacon/design-system",
+  "name": "@druloloy/bacon-ui",
   "version": "1.0.0",
-  "description": "The Bacon Design System — the single source of truth for Bacon's visual language in React Native.",
+  "private": true,
+  "description": "Bacon — the React Native design library for the Bacon app. Tokens, components, and screen templates built from the Bacon Brand & Interface Guide.",
   "license": "MIT",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -21,6 +22,7 @@
   "files": [
     "src",
     "lib",
+    "CHANGELOG.md",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/*.stories.tsx"
@@ -42,8 +44,8 @@
     "test:integration": "jest tests/integration",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:package",
     "storybook": "npm --prefix example run storybook",
-    "prepack": "npm run clean && npm run build",
-    "verify:package": "node scripts/verify-package.mjs"
+    "verify:package": "node scripts/verify-package.mjs",
+    "prepare": "bob build"
   },
   "keywords": [
     "bacon",
@@ -55,15 +57,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bacon/bacon-design-system.git"
+    "url": "git+https://github.com/druloloy/bacon-design-library.git"
   },
   "bugs": {
-    "url": "https://github.com/bacon/bacon-design-system/issues"
+    "url": "https://github.com/druloloy/bacon-design-library/issues"
   },
-  "homepage": "https://github.com/bacon/bacon-design-system#readme",
-  "publishConfig": {
-    "access": "restricted"
-  },
+  "homepage": "https://github.com/druloloy/bacon-design-library#readme",
   "peerDependencies": {
     "react": ">=18.2.0",
     "react-native": ">=0.73.0",

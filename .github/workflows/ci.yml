@@ -98,3 +98,58 @@ jobs:
       - name: Typecheck the example app
         working-directory: example
         run: npm run typecheck
+
+  # Bacon is installed straight from GitHub rather than from npm, so this is the path every
+  # consuming app takes. It proves the prepare script builds lib/ during a git install, and that a
+  # consumer typechecks against what actually lands in node_modules. Push-only, because a pull
+  # request from a fork has no commit this repository can install by SHA.
+  github-install:
+    name: Installs from GitHub with ${{ matrix.pm }}
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        pm: [npm, yarn]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Create an empty consumer project
+        run: |
+          mkdir -p "$RUNNER_TEMP/consumer"
+          cd "$RUNNER_TEMP/consumer"
+          npm init -y > /dev/null
+          cp "$GITHUB_WORKSPACE/scripts/consumer/consumer.tsx" .
+          echo '{"compilerOptions":{"target":"esnext","lib":["esnext","dom"],"module":"esnext","moduleResolution":"bundler","jsx":"react-jsx","strict":true,"noEmit":true,"skipLibCheck":true,"esModuleInterop":true,"types":["react"]},"include":["consumer.tsx"]}' > tsconfig.json
+
+      - name: Install Bacon from this commit on GitHub
+        working-directory: ${{ runner.temp }}/consumer
+        env:
+          SPEC: github:${{ github.repository }}#${{ github.sha }}
+          PEERS: react@18.2.0 react-native@0.73.6 react-native-safe-area-context@4.8.2 typescript@5.4.5 @types/react@18.2.79
+        run: |
+          if [ "${{ matrix.pm }}" = "yarn" ]; then
+            yarn add "$SPEC" $PEERS
+          else
+            npm install "$SPEC" $PEERS --no-audit --no-fund
+          fi
+
+      - name: The library was built during install
+        working-directory: ${{ runner.temp }}/consumer
+        run: |
+          PKG=node_modules/@druloloy/bacon-ui
+          for f in lib/commonjs/index.js lib/module/index.js lib/typescript/src/index.d.ts src/index.ts; do
+            test -f "$PKG/$f" || { echo "::error::$f is missing from the installed package"; exit 1; }
+          done
+          for d in tests stories example; do
+            test ! -d "$PKG/$d" || { echo "::error::$d/ should not ship in the installed package"; exit 1; }
+          done
+
+      - name: A consumer typechecks against the installed package
+        working-directory: ${{ runner.temp }}/consumer
+        run: npx tsc -p tsconfig.json

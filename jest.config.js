@@ -5,7 +5,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testMatch: ['<rootDir>/tests/**/*.test.ts', '<rootDir>/tests/**/*.test.tsx'],
   moduleNameMapper: {
-    '^@bacon/design-system$': '<rootDir>/src/index.ts',
+    '^@druloloy/bacon-ui$': '<rootDir>/src/index.ts',
   },
   transformIgnorePatterns: [
     'node_modules/(?!(?:@react-native|react-native|react-native-safe-area-context)/)',

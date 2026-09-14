@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { BaconThemeProvider } from '@bacon/design-system';
+import { BaconThemeProvider } from '@druloloy/bacon-ui';
 
 import { DashboardScreen } from './src/screens/DashboardScreen';
 import { CreateBudgetNameScreen } from './src/screens/CreateBudgetNameScreen';
@@ -15,7 +15,7 @@ import type { Budget, Route } from './src/types';
  * The example app.
  *
  * Its only job is to prove the package is usable from outside: every import below comes from
- * `@bacon/design-system`, never from an internal path.
+ * `@druloloy/bacon-ui`, never from an internal path.
  *
  * Note what lives here and not in the library — the routing, the draft budget state, the wallet
  * data, and the decision about *which* screen is a money screen. The design system answers "what
@@ -34,15 +34,14 @@ export default function App(): React.JSX.Element {
   });
 
   /**
-   * Quicksand, loaded per weight. The design system defaults to the named-family strategy on
-   * Android and a single family on iOS; registering all four files satisfies both.
+   * Quicksand, loaded per weight. Each file is registered under its own name, so the provider below
+   * asks for fonts by those names on every platform (fontStrategy="named").
    */
   const [fontsLoaded] = useFonts({
     'Quicksand-Light': require('./assets/fonts/Quicksand-Light.ttf'),
     'Quicksand-Regular': require('./assets/fonts/Quicksand-Regular.ttf'),
     'Quicksand-Medium': require('./assets/fonts/Quicksand-Medium.ttf'),
     'Quicksand-Bold': require('./assets/fonts/Quicksand-Bold.ttf'),
-    Quicksand: require('./assets/fonts/Quicksand-Regular.ttf'),
   });
 
   const resetDraft = useCallback(() => {
@@ -101,10 +100,10 @@ export default function App(): React.JSX.Element {
   return (
     <SafeAreaProvider>
       {/*
-        The design system is configured once, here. `fontStrategy` is the one platform decision a
-        consuming app owns: it depends on how the app registered Quicksand, not on the brand.
+        Bacon is configured once, here. fontStrategy="named" matches how useFonts registered the four
+        Quicksand files above. It is the one setting that depends on the app, not on the brand.
       */}
-      <BaconThemeProvider>
+      <BaconThemeProvider fontStrategy="named">
         <StatusBar style={route === 'settings' ? 'light' : 'dark'} />
         {screen}
       </BaconThemeProvider>

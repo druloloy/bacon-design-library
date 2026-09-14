@@ -1,8 +1,11 @@
 # Architecture
 
-Why this package is shaped the way it is. Each decision is labelled **Brand Guide requirement**
-(the guide said so), **Architectural decision** (we chose, and the guide was silent), or
-**Engineering detail** (a React Native reality, not a design one).
+Why Bacon is shaped the way it is. Read this when an API seems stricter than you expected — the
+reason is usually below.
+
+Each decision is labelled **Brand Guide requirement** (the guide said so), **Architectural
+decision** (we chose, and the guide was silent), or **Engineering detail** (a React Native reality,
+not a design one).
 
 ---
 
@@ -84,13 +87,13 @@ The compromise: extension points are typed down to what is safe.
 | Organism | A primary Bacon surface                        | `WalletTile`, `BottomSheet`                                |
 | Template | A documented screen archetype                  | `OneQuestionTemplate`                                      |
 
-**Two deliberate departures from the brief's suggested tree:**
+**Two deliberate departures from a textbook Atomic Design tree:**
 
-1. **No separate `patterns/` layer.** The brief listed both `templates/` (MoneyScreen,
-   SystemScreen, QuestionScreen, CompletionScreen) and `patterns/` (HeroFeed, NavyHero, OneQuestion,
-   NavyStack, Completion) — the same five things twice. The guide names _four archetypes and one
-   overlay_. One template per archetype, and the overlay (`BottomSheet`) as an organism, is the
-   honest mapping; the second layer would be abstraction for its own sake and the two would drift.
+1. **No separate `patterns/` layer.** Atomic Design setups often keep both screen _templates_ and
+   higher-level _patterns_. For Bacon those would be the same five things twice: the guide names
+   _four archetypes and one overlay_. One template per archetype, with the overlay (`BottomSheet`)
+   as an organism, is the honest mapping. A second layer would be abstraction for its own sake, and
+   the two would drift apart.
 
 2. **Archetypes 1 and 1b are one template.** The guide itself calls 1b "the same archetype, navy
    hero", so `HeroFeedTemplate` takes `heroVariant` rather than there being a second component.
@@ -125,11 +128,18 @@ data, and imports every visual decision.
 **Engineering detail.**
 
 - **One public entry point.** `src/index.ts` is the entire API. The `exports` map has no wildcard,
-  so `@bacon/design-system/src/organisms/WalletTile` does not resolve — deep imports are blocked,
+  so `@druloloy/bacon-ui/src/organisms/WalletTile` does not resolve — deep imports are blocked,
   not merely discouraged.
-- **`react-native-builder-bob`** produces CommonJS, ESM and declarations. `react-native` and
-  `source` fields point at `src` so Metro consumes TypeScript directly in development while
-  published consumers get `lib`.
+- **Installed from GitHub, not npm.** Apps depend on
+  `github:druloloy/bacon-design-library#<tag>`. The package is `private`, so it can't be published by
+  accident, and a release is a git tag plus a GitHub Release.
+- **Built during install.** `lib/` is not committed. The `prepare` script runs
+  `react-native-builder-bob` when an app installs Bacon from GitHub: npm and Yarn Classic both
+  install a git dependency's dev dependencies and run its `prepare` script before packing it. That
+  keeps build output out of the repository and guarantees it matches the tagged source.
+- **`react-native-builder-bob`** produces CommonJS, ES modules and type declarations. The
+  `react-native` and `source` fields point at `src`, so Metro can read the TypeScript directly, and
+  everything else reads `lib`.
 - **No runtime dependencies.** `react` and `react-native` are peers;
   `react-native-safe-area-context` is an _optional_ peer, loaded through a guarded lazy require
   that degrades to zero insets rather than failing an app that does not have it.
@@ -152,15 +162,22 @@ data, and imports every visual decision.
    declarations**. That last step catches the class of bug unit tests never see: a component
    implemented and tested but never exported, or a broken entry point.
 
-CI additionally installs the example app and typechecks it against the built package.
+CI adds two checks on top:
+
+- **The example app** installs and typechecks against the built library.
+- **Installs from GitHub** installs the pushed commit into an empty app with npm and with yarn —
+  exactly the way a real app gets Bacon — confirms the install built `lib/`, and typechecks an app
+  against what landed in `node_modules`.
 
 ## 8 · Platform realities
 
 **Engineering detail**, none of it a brand rule:
 
-- **Font weights on Android.** Android does not reliably apply `fontWeight` to a custom
-  `fontFamily`; only the registered family name resolves. So the default strategy is named families
-  on Android and a single family elsewhere, overridable per app.
+- **Font weights.** Android does not reliably apply `fontWeight` to a custom `fontFamily`; only the
+  registered family name resolves. So the default strategy is named families on Android and a
+  single family elsewhere. The single-family strategy only works when the platform groups all four
+  weights under one family name. Expo's `useFonts` registers each file under its own name instead,
+  which is why the docs tell apps to pass `fontStrategy="named"`.
 - **Shadows.** Android's `elevation` cannot reproduce a coloured, offset, 6%-opacity shadow.
   `elevation: 2` is the closest match; iOS uses the exact spec.
 - **Safe areas** come from the optional peer dependency, with a zero fallback.

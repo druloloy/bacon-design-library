@@ -59,7 +59,7 @@ import {
   BACON_SCREEN_VARIANTS,
   WALLET_TILE_STATES,
   BACON_CATEGORIES,
-} from '@bacon/design-system';
+} from '@druloloy/bacon-ui';
 import type {
   BaconTheme,
   BaconSurface,
@@ -71,7 +71,7 @@ import type {
   CompletionLink,
   BaconCurrency,
   BaconFontWeight,
-} from '@bacon/design-system';
+} from '@druloloy/bacon-ui';
 
 describe('the public API', () => {
   it('exports every component a consuming app needs', () => {

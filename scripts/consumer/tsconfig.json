@@ -12,7 +12,7 @@
     "types": ["react"],
     "baseUrl": "../..",
     "paths": {
-      "@bacon/design-system": ["./lib/typescript/src/index.d.ts"]
+      "@druloloy/bacon-ui": ["./lib/typescript/src/index.d.ts"]
     }
   },
   "include": ["consumer.tsx"]

@@ -11,7 +11,7 @@ import {
   StatTileRow,
   WalletGrid,
   WalletTile,
-} from '@bacon/design-system';
+} from '@druloloy/bacon-ui';
 import { WALLETS } from '../data';
 
 /**

@@ -1,42 +1,54 @@
-# Example consumer app
+# Example app
 
-A small Expo app whose only job is to prove `@bacon/design-system` works through its public API.
+A small Expo app that uses Bacon the way a real app does. Use it to see the components running
+together, and as a reference when you build your own screens.
 
-Every import in `src/` comes from `@bacon/design-system`. None reaches into `@bacon/design-system/src/...`
-— if one did, the package's `exports` map would refuse to resolve it.
+Every import in `src/` comes from `@druloloy/bacon-ui` — never from a file inside the library.
 
-## Screens
+## What's in it
 
-| Screen             | Archetype        | What it demonstrates                                                                                        |
-| ------------------ | ---------------- | ----------------------------------------------------------------------------------------------------------- |
-| Dashboard          | 1 · Hero + feed  | Money hero, balance, eye toggle, wallet tiles in all three states, stat tiles, row links, FAB, bottom sheet |
-| Add New Budget (1) | 2 · One question | TopBar with NEXT, Light title, question, text input, category chips                                         |
-| Add New Budget (2) | 2 · One question | Quick-amount input (type _or_ tap), period chips, FINISH in the bar                                         |
-| Completion         | 4 · Completion   | CLOSE, Light headline, illustration, one line of consequence, two row links                                 |
-| Settings           | 3 · Navy stack   | Navy ground, grouped 2-up panels, Navy 600 controls                                                         |
+| Screen             | Template              | Shows                                                                                                                                  |
+| ------------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Dashboard          | `HeroFeedTemplate`    | Balance with the hide/show eye, stat tiles, wallet tiles in all three states, row links, app-switcher button, bottom sheet with delete |
+| Add New Budget (1) | `OneQuestionTemplate` | Top bar with NEXT, a question, a text field, category chips                                                                            |
+| Add New Budget (2) | `OneQuestionTemplate` | Type-or-tap amount field, period chips, FINISH in the top bar                                                                          |
+| Completion         | `CompletionTemplate`  | CLOSE, headline, illustration, one line about what happens next, two row links                                                         |
+| Settings           | `NavyStackTemplate`   | Navy screen with grouped panels and buttons                                                                                            |
 
-## Running it
+## Run it
 
-```bash
-# from the repository root
-npm install
-npm run build
+1. **Add the fonts.** Put the four Quicksand files in `assets/fonts/`. See
+   [`assets/fonts/README.md`](assets/fonts/README.md).
+2. **Build Bacon and start the app**, from the repository root:
 
-cd example
-npm install
-npm start
-```
+   ```bash
+   npm install
+   npm run build
+   cd example
+   npm install
+   npm start
+   ```
 
-## Running Storybook
+The example uses your **local copy** of Bacon (`"@druloloy/bacon-ui": "file:.."`), not the GitHub
+release, so it always reflects what's in `src/`. After changing Bacon's source, run `npm run build`
+in the repository root to see the change here.
+
+## Run Storybook
 
 ```bash
 cd example
 npm run storybook
 ```
 
-Storybook renders the stories from the package's `stories/` folder. It lives here rather than in
-the library so the published package carries no Storybook dependency.
+This generates the story list from the repository's `stories/` folder, then starts the app in
+Storybook mode.
 
-## Fonts
+## Things worth copying
 
-Put the four Quicksand weights in `assets/fonts/` — see the README there.
+- **Fonts** — [`App.tsx`](App.tsx) loads the four Quicksand files and passes
+  `fontStrategy="named"` to `BaconThemeProvider`.
+- **Linking a local library** — [`metro.config.js`](metro.config.js) lets Metro see the library
+  folder and makes sure only one copy of React is loaded. You need the same setup to use a local
+  checkout of Bacon in your own app.
+- **Where logic lives** — routing, draft form state and wallet data stay in the app (`App.tsx`,
+  `src/data.ts`). Bacon only decides how things look.

@@ -5,7 +5,7 @@ import {
   Panel,
   PanelGroup,
   RowLink,
-} from '@bacon/design-system';
+} from '@druloloy/bacon-ui';
 
 /**
  * Archetype 3 — Navy stack.

@@ -33,7 +33,7 @@
     "types": ["jest", "react"],
     "baseUrl": ".",
     "paths": {
-      "@bacon/design-system": ["./src/index.ts"]
+      "@druloloy/bacon-ui": ["./src/index.ts"]
     }
   },
   "include": ["src", "tests", "stories", "types"],
