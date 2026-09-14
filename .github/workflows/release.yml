@@ -1,7 +1,7 @@
 name: Release
 
 # Bacon is installed from GitHub, not from npm, so a release is a git tag plus a GitHub Release.
-# Apps pin to the tag:  "@druloloy/bacon-ui": "github:druloloy/bacon-design-library#v1.2.0"
+# Apps pin to the tag:  "@druloloy/bacon-ui": "git+https://github.com/druloloy/bacon-design-library.git#v1.2.0"
 #
 # To cut a release: bump "version" in package.json, add a matching "## [x.y.z]" section to
 # CHANGELOG.md, commit, then push a tag named v<version>. This workflow refuses to publish a

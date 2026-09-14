@@ -17,15 +17,18 @@ import { WalletTile } from '@druloloy/bacon-ui';
 Bacon isn't published to npm. Install it from GitHub, pinned to a release:
 
 ```bash
-yarn add github:druloloy/bacon-design-library#v1.0.0
+yarn add git+https://github.com/druloloy/bacon-design-library.git#v1.0.0
 ```
 
 ```bash
-npm install github:druloloy/bacon-design-library#v1.0.0
+npm install git+https://github.com/druloloy/bacon-design-library.git#v1.0.0
 ```
 
 It installs as **`@druloloy/bacon-ui`**. The first install compiles the library, so give it a minute
 or two.
+
+Use the full `git+https://` URL exactly as shown. Yarn Classic treats the shorter `github:` form as a
+plain download and skips the compile step.
 
 Bacon needs React 18.2+ and React Native 0.73+, which your app already has. Also add:
 

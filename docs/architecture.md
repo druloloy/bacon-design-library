@@ -131,11 +131,13 @@ data, and imports every visual decision.
   so `@druloloy/bacon-ui/src/organisms/WalletTile` does not resolve — deep imports are blocked,
   not merely discouraged.
 - **Installed from GitHub, not npm.** Apps depend on
-  `github:druloloy/bacon-design-library#<tag>`. The package is `private`, so it can't be published by
+  `git+https://github.com/druloloy/bacon-design-library.git#<tag>`. The package is `private`, so it can't be published by
   accident, and a release is a git tag plus a GitHub Release.
 - **Built during install.** `lib/` is not committed. The `prepare` script runs
   `react-native-builder-bob` when an app installs Bacon from GitHub: npm and Yarn Classic both
-  install a git dependency's dev dependencies and run its `prepare` script before packing it. That
+  install a git dependency's dev dependencies and run its `prepare` script before packing it. Yarn Classic only does this for a git URL: it resolves
+  the `github:` shorthand to a tarball and never runs `prepare`, which is why the docs give the full
+  `git+https://` URL. That
   keeps build output out of the repository and guarantees it matches the tagged source.
 - **`react-native-builder-bob`** produces CommonJS, ES modules and type declarations. The
   `react-native` and `source` fields point at `src`, so Metro can read the TypeScript directly, and

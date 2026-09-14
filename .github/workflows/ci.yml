@@ -103,6 +103,9 @@ jobs:
   # consuming app takes. It proves the prepare script builds lib/ during a git install, and that a
   # consumer typechecks against what actually lands in node_modules. Push-only, because a pull
   # request from a fork has no commit this repository can install by SHA.
+  #
+  # It installs with the same git+https URL the docs give. Yarn Classic resolves the github:
+  # shorthand to a tarball and never runs prepare, so testing the shorthand would test the wrong thing.
   github-install:
     name: Installs from GitHub with ${{ matrix.pm }}
     if: github.event_name == 'push'
@@ -130,7 +133,7 @@ jobs:
       - name: Install Bacon from this commit on GitHub
         working-directory: ${{ runner.temp }}/consumer
         env:
-          SPEC: github:${{ github.repository }}#${{ github.sha }}
+          SPEC: git+https://github.com/${{ github.repository }}.git#${{ github.sha }}
           PEERS: react@18.2.0 react-native@0.73.6 react-native-safe-area-context@4.8.2 typescript@5.4.5 @types/react@18.2.79
         run: |
           if [ "${{ matrix.pm }}" = "yarn" ]; then

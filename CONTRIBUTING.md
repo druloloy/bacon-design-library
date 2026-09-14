@@ -86,7 +86,7 @@ git rev-parse HEAD          # copy the commit hash
 Then, in your app:
 
 ```bash
-yarn add github:druloloy/bacon-design-library#<commit-hash>
+yarn add git+https://github.com/druloloy/bacon-design-library.git#<commit-hash>
 ```
 
 Installing by commit hash rather than branch name means you always know exactly which version of

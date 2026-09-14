@@ -19,20 +19,19 @@ Bacon is not published to npm. Install it straight from GitHub, pinned to a rele
 With npm:
 
 ```bash
-npm install github:druloloy/bacon-design-library#v1.0.0
+npm install git+https://github.com/druloloy/bacon-design-library.git#v1.0.0
 ```
 
 With yarn:
 
 ```bash
-yarn add github:druloloy/bacon-design-library#v1.0.0
+yarn add git+https://github.com/druloloy/bacon-design-library.git#v1.0.0
 ```
 
-Either command adds this line to your `package.json`:
-
-```json
-"@druloloy/bacon-ui": "github:druloloy/bacon-design-library#v1.0.0"
-```
+Use the full `git+https://` URL, not the shorter `github:druloloy/bacon-design-library` form. Yarn
+Classic downloads the short form as a plain tarball and skips Bacon's build step, so the package
+would install without its compiled files. The full URL makes both npm and yarn clone the repository
+and build it.
 
 **The first install takes a minute or two.** Your package manager clones the repository, installs
 Bacon's build tools, and compiles the library. You don't run a build yourself.
@@ -424,9 +423,15 @@ different variant. The full list is in the [component reference](components.md#b
 ## Troubleshooting
 
 **TypeScript can't find `@druloloy/bacon-ui`, or `node_modules/@druloloy/bacon-ui/lib` is missing.**
-The library is compiled during install, and that step didn't run. Check that your project doesn't
-disable install scripts (`ignore-scripts=true` in `.npmrc` or `.yarnrc`, or an `--ignore-scripts`
-flag), then delete `node_modules/@druloloy/bacon-ui` and install again.
+The library is compiled during install, and that step didn't run. The two usual causes:
+
+- **The dependency uses the `github:` shorthand.** Yarn Classic downloads it as a tarball and skips
+  the build. Change it to `git+https://github.com/druloloy/bacon-design-library.git#v1.0.0`, with
+  your tag.
+- **Install scripts are turned off**, by `ignore-scripts=true` in `.npmrc` or `.yarnrc`, or by an
+  `--ignore-scripts` flag.
+
+Fix the cause, delete `node_modules/@druloloy/bacon-ui`, and install again.
 
 **Text shows in the system font.**
 Quicksand isn't loaded, or the names don't match. Register the four files under exactly

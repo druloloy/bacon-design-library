@@ -13,7 +13,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 > pixels.
 
 To update an app, change the tag in its `package.json` — for example
-`github:druloloy/bacon-design-library#v1.0.0` → `#v1.1.0` — and reinstall.
+`git+https://github.com/druloloy/bacon-design-library.git#v1.0.0` → `#v1.1.0` — and reinstall.
 
 ## [Unreleased]
 
@@ -26,9 +26,11 @@ The first release, built from the _Bacon Brand & Interface Guide_ v1.0.
 ### Installing
 
 - Bacon installs from GitHub, not npm:
-  `yarn add github:druloloy/bacon-design-library#v1.0.0`. The package name is
+  `yarn add git+https://github.com/druloloy/bacon-design-library.git#v1.0.0`. The package name is
   `@druloloy/bacon-ui`.
 - The library compiles during install (the `prepare` script), so there's no build step in your app.
+- Install with the full `git+https://` URL. Yarn Classic fetches the `github:` shorthand as a tarball
+  and skips the build.
 - The package is marked `private`, so it can't be published to npm by accident.
 
 ### Added — foundations
