@@ -142,17 +142,23 @@ jobs:
             npm install "$SPEC" $PEERS --no-audit --no-fund
           fi
 
-      - name: The library was built during install
+      - name: The installed package is complete and ships nothing extra
         working-directory: ${{ runner.temp }}/consumer
-        run: |
-          PKG=node_modules/@druloloy/bacon-ui
-          for f in lib/commonjs/index.js lib/module/index.js lib/typescript/src/index.d.ts src/index.ts; do
-            test -f "$PKG/$f" || { echo "::error::$f is missing from the installed package"; exit 1; }
-          done
-          for d in tests stories example; do
-            test ! -d "$PKG/$d" || { echo "::error::$d/ should not ship in the installed package"; exit 1; }
-          done
+        run: bash "$GITHUB_WORKSPACE/scripts/check-installed-package.sh" node_modules/@druloloy/bacon-ui
 
       - name: A consumer typechecks against the installed package
         working-directory: ${{ runner.temp }}/consumer
         run: npx tsc -p tsconfig.json
+
+      # Apps reinstall from their lockfile in their own CI. npm records Bacon in package-lock.json as a
+      # git+ssh:// URL, and this runner has no GitHub SSH key, so this is exactly the case an app hits.
+      - name: Reinstall from the lockfile
+        working-directory: ${{ runner.temp }}/consumer
+        run: |
+          rm -rf node_modules
+          if [ "${{ matrix.pm }}" = "yarn" ]; then
+            yarn install --frozen-lockfile
+          else
+            npm ci --no-audit --no-fund
+          fi
+          bash "$GITHUB_WORKSPACE/scripts/check-installed-package.sh" node_modules/@druloloy/bacon-ui
