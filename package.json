@@ -22,10 +22,7 @@
   "files": [
     "src",
     "lib",
-    "CHANGELOG.md",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/*.stories.tsx"
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "scripts": {
