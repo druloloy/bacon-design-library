@@ -168,8 +168,10 @@ CI adds two checks on top:
 
 - **The example app** installs and typechecks against the built library.
 - **Installs from GitHub** installs the pushed commit into an empty app with npm and with yarn —
-  exactly the way a real app gets Bacon — confirms the install built `lib/`, and typechecks an app
-  against what landed in `node_modules`.
+  exactly the way a real app gets Bacon. `scripts/check-installed-package.sh` confirms the install
+  built `lib/`, shipped no repository-only folders and no nested React, then an app typechecks
+  against what landed in `node_modules`. Finally it reinstalls from the lockfile, as an app's own CI
+  would.
 
 ## 8 · Platform realities
 

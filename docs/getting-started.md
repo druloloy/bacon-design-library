@@ -33,6 +33,18 @@ Classic downloads the short form as a plain tarball and skips Bacon's build step
 would install without its compiled files. The full URL makes both npm and yarn clone the repository
 and build it.
 
+What ends up in your `package.json` depends on the package manager:
+
+- **yarn** saves the URL exactly as you typed it.
+- **npm** rewrites it to the short `github:druloloy/bacon-design-library#v1.0.0` form, and pins the
+  exact commit in `package-lock.json`. That's fine while the project uses npm. If you ever switch it
+  to yarn, change the line back to the `git+https://` URL first.
+
+npm also records Bacon in `package-lock.json` as a `git+ssh://` URL and prints
+`skipping integrity check for git dependency`. Both are expected. A git dependency has no registry
+checksum, so the lockfile pins the exact commit instead, and `npm ci` still installs it on machines
+with no GitHub SSH key, such as a CI server.
+
 **The first install takes a minute or two.** Your package manager clones the repository, installs
 Bacon's build tools, and compiles the library. You don't run a build yourself.
 
@@ -427,7 +439,8 @@ The library is compiled during install, and that step didn't run. The two usual 
 
 - **The dependency uses the `github:` shorthand.** Yarn Classic downloads it as a tarball and skips
   the build. Change it to `git+https://github.com/druloloy/bacon-design-library.git#v1.0.0`, with
-  your tag.
+  your tag. npm writes the shorthand itself, so this usually means a project first installed with npm
+  has switched to yarn.
 - **Install scripts are turned off**, by `ignore-scripts=true` in `.npmrc` or `.yarnrc`, or by an
   `--ignore-scripts` flag.
 

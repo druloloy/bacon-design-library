@@ -92,6 +92,15 @@ yarn add git+https://github.com/druloloy/bacon-design-library.git#<commit-hash>
 Installing by commit hash rather than branch name means you always know exactly which version of
 your change the app is running. Push again, install the new hash.
 
+To check what your app actually received, run the same check CI uses, from your Bacon clone:
+
+```bash
+bash scripts/check-installed-package.sh ../your-app/node_modules/@druloloy/bacon-ui
+```
+
+It fails if the build output is missing, if repository-only folders shipped, or if the package
+carries its own copy of React.
+
 For a faster edit-and-reload loop you can point your app at a local folder instead, but React Native
 needs extra setup for that: Metro has to watch the folder, and it must not load a second copy of
 React (which shows up as an "Invalid hook call" error). [`example/metro.config.js`](example/metro.config.js)
@@ -181,11 +190,11 @@ ESLint fails the build on:
 
 ## What CI checks
 
-| Job                          | What it proves                                                                                           |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Lint, typecheck, test, build | Everything in `npm run verify`, plus formatting and coverage                                             |
-| Example app                  | The example app typechecks against the built library                                                     |
-| Installs from GitHub         | Installing the pushed commit with npm and with yarn builds the library, and an app typechecks against it |
+| Job                          | What it proves                                                                                                                                                         |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Lint, typecheck, test, build | Everything in `npm run verify`, plus formatting and coverage                                                                                                           |
+| Example app                  | The example app typechecks against the built library                                                                                                                   |
+| Installs from GitHub         | Installing the pushed commit with npm and with yarn builds the library, ships only `src/` and `lib/`, typechecks in an app, and survives a reinstall from the lockfile |
 
 ---
 

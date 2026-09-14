@@ -81,7 +81,8 @@ The first release, built from the _Bacon Brand & Interface Guide_ v1.0.
 - 239 tests across unit, brand-rule, component, accessibility and public-API suites.
 - `npm run verify:package`, which typechecks a small app against the built type declarations.
 - CI that runs every check, typechecks the example app, and installs Bacon from GitHub with both npm
-  and yarn to confirm the install builds the library.
+  and yarn: it confirms the install builds the library and ships nothing extra, then reinstalls from
+  the lockfile the way an app's own CI would.
 - A release workflow that turns a `v*` tag into a GitHub Release, and refuses when the tag,
   `package.json` version and changelog disagree.
 - Storybook stories for the tokens, every component and all four templates.
