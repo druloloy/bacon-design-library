@@ -5,5 +5,9 @@
     "jsx": "react-jsx",
     "noEmit": true
   },
-  "include": ["App.tsx", "src", ".storybook"]
+  "include": ["App.tsx", "src"],
+  // Listed as literal files, not via "include": TypeScript's include globs skip any path segment
+  // that starts with a dot, so ".storybook" in include silently checked nothing. storybook.requires
+  // is generated (npm run storybook:generate) and is pulled in through index.tsx's import.
+  "files": [".storybook/index.tsx", ".storybook/main.ts", ".storybook/preview.tsx"]
 }

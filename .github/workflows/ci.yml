@@ -89,6 +89,12 @@ jobs:
         working-directory: example
         run: npm install
 
+      # .storybook/index.tsx imports storybook.requires, which Storybook generates from the stories
+      # and which is not committed. Generate it first, or the typecheck cannot resolve the import.
+      - name: Generate Storybook stories
+        working-directory: example
+        run: npm run storybook:generate
+
       - name: Typecheck the example app
         working-directory: example
         run: npm run typecheck

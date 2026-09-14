@@ -14,7 +14,17 @@ follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) with one Baco
 
 ## [Unreleased]
 
-Nothing yet.
+### Fixed
+
+- CI could not install dependencies. `@storybook/react` peers on `react-dom`, which was never
+  declared, so a strict `npm ci` resolved `react-dom@19` and conflicted with `react@18.2.0`.
+  `react-dom@18.2.0` is now pinned.
+- The example app could not install: the unused `@storybook/addon-ondevice-controls` requires
+  Expo 52+. It is removed, and the example is aligned to Storybook React Native v8 with the
+  gesture-handler, Reanimated and bottom-sheet peers it needs, plus the Reanimated Babel plugin.
+- The example typecheck silently skipped `.storybook/`: TypeScript's `include` globs ignore
+  dot-prefixed folders. The Storybook entry files are now listed in `files`, and CI generates
+  `storybook.requires` before typechecking.
 
 ## [1.0.0] — 2026-09-13
 
